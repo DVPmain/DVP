@@ -53,6 +53,7 @@ class ProgramGenerator():
         self.temperature = temperature
         self.top_p = top_p
         self.prob_agg = prob_agg
+        self.client = openai.OpenAI()
 
     def compute_prob(self,response):
         eos = '<|endoftext|>'
@@ -71,8 +72,8 @@ class ProgramGenerator():
             response.choices[0]['logprobs']['token_logprobs'][:i]))
 
     def generate(self,inputs):
-        response = openai.Completion.create(
-            model="gpt-4",
+        response = self.client.chat.completion.create(
+            model="gpt-4-0125-preview",
             prompt=self.prompter(inputs),
             temperature=self.temperature,
             max_tokens=512,
